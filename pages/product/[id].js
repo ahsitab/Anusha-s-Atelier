@@ -50,7 +50,7 @@ Size: ${selectedSize}`;
           {/* Left Column: Images */}
           <div className="space-y-4">
             <div className="aspect-[3/4] bg-brand-beige-dark overflow-hidden relative group">
-              <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <img src={product.images?.[0] || "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop"} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               {product.oldPrice && (
                 <div className="absolute top-4 left-4 z-10 bg-brand-pink text-red-800 text-xs font-bold px-3 py-1.5 tracking-wider uppercase shadow-sm">
                   -{Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)}% OFF

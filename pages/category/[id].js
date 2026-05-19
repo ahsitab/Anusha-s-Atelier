@@ -68,7 +68,7 @@ export default function CategoryPage({ category, categoryProducts }) {
 
       {/* Category Hero */}
       <div className="relative h-[40vh] md:h-[50vh] bg-brand-black w-full overflow-hidden">
-        <img src={category.image || category.imageUrl} alt={category.name} className="w-full h-full object-cover opacity-60" />
+        <img src={category.image || category.imageUrl || "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop"} alt={category.name} className="w-full h-full object-cover opacity-60" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
           <h1 className="text-4xl md:text-6xl font-serif text-white tracking-wider uppercase">{category.name}</h1>
           <p className="text-gray-300 mt-4 tracking-widest text-sm uppercase">Exclusive Collection</p>
