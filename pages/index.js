@@ -123,6 +123,6 @@ export async function getStaticProps() {
       sanityProducts,
       sanityCategories
     },
-    revalidate: 60, // revalidate every minute
+    revalidate: 10, // rebuild every 10 seconds so new products appear quickly
   };
 }

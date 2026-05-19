@@ -193,11 +193,13 @@ Size: ${selectedSize}`;
 }
 
 export async function getStaticPaths() {
+  // Only pre-generate local product paths.
+  // New Sanity products use fallback: 'blocking' — Next.js builds their page on first visit.
   const paths = products.map((product) => ({
     params: { id: product.id },
   }));
 
-  return { paths, fallback: false };
+  return { paths, fallback: 'blocking' };
 }
 
 export async function getStaticProps({ params }) {
@@ -212,6 +214,6 @@ export async function getStaticProps({ params }) {
     props: {
       product: sanityProduct || localProduct,
     },
-    revalidate: 60,
+    revalidate: 10,
   };
 }
