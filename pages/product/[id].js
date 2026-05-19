@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { ShoppingBag, Phone, Copy, Check, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { client } from '@/src/sanity/lib/client';
 
 export default function ProductPage({ product }) {
   const router = useRouter();
@@ -40,7 +41,7 @@ Size: ${selectedSize}`;
       className="bg-white min-h-screen pt-12 pb-24"
     >
       <Head>
-        <title>{product.name} | Anusha's Atelier</title>
+        <title>{`${product.name} | Anusha's Atelier`}</title>
       </Head>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -200,11 +201,17 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const product = products.find((p) => p.id === params.id);
+  const localProduct = products.find((p) => p.id === params.id);
   
+  const sanityProduct = await client.fetch(`*[_type == "product" && id == $productId][0]{
+    id, name, price, oldPrice, category, subcategory, colors, sizes, description, isNew, isTrending, isBestSeller,
+    "images": images[].asset->url
+  }`, { productId: params.id });
+
   return {
     props: {
-      product,
+      product: sanityProduct || localProduct,
     },
+    revalidate: 60,
   };
 }

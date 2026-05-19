@@ -6,6 +6,7 @@ import { useState, useMemo } from 'react';
 import Head from 'next/head';
 import { Filter, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { client } from '@/src/sanity/lib/client';
 
 export default function CategoryPage({ category, categoryProducts }) {
   const router = useRouter();
@@ -62,7 +63,7 @@ export default function CategoryPage({ category, categoryProducts }) {
       className="bg-brand-beige min-h-screen pb-20"
     >
       <Head>
-        <title>{category.name} | Anusha's Atelier</title>
+        <title>{`${category.name} | Anusha's Atelier`}</title>
       </Head>
 
       {/* Category Hero */}
@@ -168,12 +169,20 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const category = categories.find((c) => c.id === params.id);
-  const categoryProducts = products.filter((p) => p.category === category.name);
+  
+  const sanityProducts = await client.fetch(`*[_type == "product" && category == $catId]{
+    id, name, price, oldPrice, category, subcategory, colors, sizes, description, isNew, isTrending, isBestSeller,
+    "images": images[].asset->url
+  }`, { catId: params.id });
+
+  const localCategoryProducts = products.filter((p) => p.category === category.name);
+  const categoryProducts = sanityProducts?.length > 0 ? sanityProducts : localCategoryProducts;
 
   return {
     props: {
       category,
       categoryProducts,
     },
+    revalidate: 60
   };
 }

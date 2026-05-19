@@ -6,9 +6,13 @@ import { products } from "@/data/products";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-export default function Home() {
-  const trendingProducts = products.filter(p => p.trending).slice(0, 4);
-  const bestSellers = products.filter(p => p.bestSeller).slice(0, 4);
+import { client } from "@/src/sanity/lib/client";
+
+export default function Home({ sanityProducts }) {
+  const finalProducts = sanityProducts?.length > 0 ? sanityProducts : products;
+  
+  const trendingProducts = finalProducts.filter(p => p.isTrending || p.trending).slice(0, 4);
+  const bestSellers = finalProducts.filter(p => p.isBestSeller || p.bestSeller).slice(0, 4);
 
   return (
     <motion.div 
@@ -97,4 +101,18 @@ export default function Home() {
       <InstagramGallery />
     </motion.div>
   );
+}
+
+export async function getStaticProps() {
+  const sanityProducts = await client.fetch(`*[_type == "product"]{
+    id, name, price, oldPrice, category, subcategory, colors, sizes, description, isNew, isTrending, isBestSeller,
+    "images": images[].asset->url
+  }`);
+
+  return {
+    props: {
+      sanityProducts
+    },
+    revalidate: 60, // revalidate every minute
+  };
 }
