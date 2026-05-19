@@ -196,7 +196,7 @@ export async function getServerSideProps({ params }) {
   const localProduct = products.find((p) => p.id === params.id);
 
   const sanityProduct = await client.fetch(`*[_type == "product" && id == $productId][0]{
-    id, name, price, oldPrice, category, subcategory, colors, sizes, description, isNew, isTrending, isBestSeller,
+    id, name, price, oldPrice, "category": category->id, subcategory, colors, sizes, description, isNew, isTrending, isBestSeller,
     "images": images[].asset->url
   }`, { productId: params.id });
 

@@ -30,17 +30,9 @@ export default {
     {
       name: 'category',
       title: 'Category',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Saree', value: 'saree'},
-          {title: 'Three Piece', value: 'three-piece'},
-          {title: 'One Piece', value: 'one-piece'},
-          {title: 'Jewelry', value: 'jewelry'},
-          {title: 'Sandals', value: 'sandals'},
-          {title: 'Bed Sheet', value: 'bed-sheet'}
-        ]
-      }
+      type: 'reference',
+      to: [{ type: 'category' }],
+      validation: Rule => Rule.required()
     },
     {
       name: 'subcategory',

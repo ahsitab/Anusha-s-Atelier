@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,6 +14,23 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    fetch('/api/categories')
+      .then(res => res.json())
+      .then(data => setCategories(data))
+      .catch(err => console.error('Error fetching categories:', err));
+  }, []);
+
+  // Fallback to initial hardcoded ones if API fails or hasn't loaded
+  const displayCategories = categories.length > 0 ? categories : [
+    { id: 'jewelry', name: 'Jewelry' },
+    { id: 'three-piece', name: 'Three Piece' },
+    { id: 'saree', name: 'Saree' },
+    { id: 'one-piece', name: 'One Piece' },
+    { id: 'sandals', name: 'Sandals' },
+    { id: 'bed-sheet', name: 'Bed Sheet' }
+  ];
 
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'glass py-3' : 'bg-brand-beige py-5 shadow-sm'}`}>
@@ -35,12 +53,11 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex space-x-8">
-            <Link href="/category/jewelry" className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors font-medium">Jewelry</Link>
-            <Link href="/category/three-piece" className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors font-medium">Three Piece</Link>
-            <Link href="/category/saree" className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors font-medium">Saree</Link>
-            <Link href="/category/one-piece" className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors font-medium">One Piece</Link>
-            <Link href="/category/sandals" className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors font-medium">Sandals</Link>
-            <Link href="/category/bed-sheet" className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors font-medium">Bed Sheet</Link>
+            {displayCategories.map(cat => (
+              <Link key={cat.id} href={`/category/${cat.id}`} className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors font-medium">
+                {cat.name}
+              </Link>
+            ))}
           </div>
 
           {/* Icons */}
@@ -62,12 +79,16 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-brand-beige border-t border-brand-beige-dark shadow-lg">
           <div className="px-4 pt-2 pb-6 space-y-1">
-            <Link href="/category/jewelry" className="block px-3 py-3 text-base tracking-widest uppercase border-b border-brand-beige-dark" onClick={() => setMobileMenuOpen(false)}>Jewelry</Link>
-            <Link href="/category/three-piece" className="block px-3 py-3 text-base tracking-widest uppercase border-b border-brand-beige-dark" onClick={() => setMobileMenuOpen(false)}>Three Piece</Link>
-            <Link href="/category/saree" className="block px-3 py-3 text-base tracking-widest uppercase border-b border-brand-beige-dark" onClick={() => setMobileMenuOpen(false)}>Saree</Link>
-            <Link href="/category/one-piece" className="block px-3 py-3 text-base tracking-widest uppercase border-b border-brand-beige-dark" onClick={() => setMobileMenuOpen(false)}>One Piece</Link>
-            <Link href="/category/sandals" className="block px-3 py-3 text-base tracking-widest uppercase border-b border-brand-beige-dark" onClick={() => setMobileMenuOpen(false)}>Sandals</Link>
-            <Link href="/category/bed-sheet" className="block px-3 py-3 text-base tracking-widest uppercase" onClick={() => setMobileMenuOpen(false)}>Bed Sheet</Link>
+            {displayCategories.map((cat, idx) => (
+              <Link 
+                key={cat.id} 
+                href={`/category/${cat.id}`} 
+                className={`block px-3 py-3 text-base tracking-widest uppercase ${idx !== displayCategories.length - 1 ? 'border-b border-brand-beige-dark' : ''}`} 
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {cat.name}
+              </Link>
+            ))}
           </div>
         </div>
       )}

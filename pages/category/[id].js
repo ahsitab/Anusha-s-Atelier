@@ -183,8 +183,8 @@ export async function getServerSideProps({ params }) {
   const categoryToUse = sanityCategory || localCategory || autoCategory;
 
   // 4. Fetch ALL Sanity products matching this category value
-  const sanityProducts = await client.fetch(`*[_type == "product" && category == $catId]{
-    id, name, price, oldPrice, category, subcategory, colors, sizes, description, isNew, isTrending, isBestSeller,
+  const sanityProducts = await client.fetch(`*[_type == "product" && category->id == $catId]{
+    id, name, price, oldPrice, "category": category->id, subcategory, colors, sizes, description, isNew, isTrending, isBestSeller,
     "images": images[].asset->url
   }`, { catId });
 

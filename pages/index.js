@@ -109,7 +109,7 @@ export default function Home({ sanityProducts, sanityCategories }) {
 
 export async function getServerSideProps() {
   const sanityProducts = await client.fetch(`*[_type == "product"]{
-    id, name, price, oldPrice, category, subcategory, colors, sizes, description, isNew, isTrending, isBestSeller,
+    id, name, price, oldPrice, "category": category->id, subcategory, colors, sizes, description, isNew, isTrending, isBestSeller,
     "images": images[].asset->url
   }`);
 
