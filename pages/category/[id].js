@@ -159,19 +159,9 @@ export default function CategoryPage({ category, categoryProducts }) {
   );
 }
 
-export async function getStaticPaths() {
-  // We can just rely on the local categories for paths, 
-  // but we should set fallback to 'blocking' so newly created Sanity categories work automatically!
-  const paths = categories.map((category) => ({
-    params: { id: category.id },
-  }));
-
-  return { paths, fallback: 'blocking' };
-}
-
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const localCategory = categories.find((c) => c.id === params.id);
-  
+
   const sanityCategory = await client.fetch(`*[_type == "category" && id == $catId][0]{
     id, name, description,
     "image": image.asset->url
@@ -188,15 +178,20 @@ export async function getStaticProps({ params }) {
     "images": images[].asset->url
   }`, { catId: params.id });
 
-  const localCategoryProducts = products.filter((p) => p.category === categoryToUse.name || p.category === categoryToUse.id);
-  const sanityProductIds = sanityProducts?.map(p => p.id) || [];
-  const categoryProducts = [...(sanityProducts || []), ...localCategoryProducts.filter(p => !sanityProductIds.includes(p.id))];
+  const localCategoryProducts = products.filter(
+    (p) => p.category === categoryToUse.name || p.category === categoryToUse.id
+  );
+  const sanityProductIds = sanityProducts?.map((p) => p.id) || [];
+  const categoryProducts = [
+    ...(sanityProducts || []),
+    ...localCategoryProducts.filter((p) => !sanityProductIds.includes(p.id)),
+  ];
 
   return {
     props: {
       category: categoryToUse,
       categoryProducts,
     },
-    revalidate: 10
   };
 }
+

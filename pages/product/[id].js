@@ -192,28 +192,21 @@ Size: ${selectedSize}`;
   );
 }
 
-export async function getStaticPaths() {
-  // Only pre-generate local product paths.
-  // New Sanity products use fallback: 'blocking' — Next.js builds their page on first visit.
-  const paths = products.map((product) => ({
-    params: { id: product.id },
-  }));
-
-  return { paths, fallback: 'blocking' };
-}
-
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const localProduct = products.find((p) => p.id === params.id);
-  
+
   const sanityProduct = await client.fetch(`*[_type == "product" && id == $productId][0]{
     id, name, price, oldPrice, category, subcategory, colors, sizes, description, isNew, isTrending, isBestSeller,
     "images": images[].asset->url
   }`, { productId: params.id });
 
+  const product = sanityProduct || localProduct;
+
+  if (!product) {
+    return { notFound: true };
+  }
+
   return {
-    props: {
-      product: sanityProduct || localProduct,
-    },
-    revalidate: 10,
+    props: { product },
   };
 }
