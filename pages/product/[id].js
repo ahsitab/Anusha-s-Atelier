@@ -12,6 +12,7 @@ export default function ProductPage({ product }) {
   const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || '');
   const [copied, setCopied] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   if (router.isFallback) {
     return <div className="flex h-screen items-center justify-center font-serif text-2xl text-brand-gold">Loading...</div>;
@@ -33,6 +34,18 @@ Price: ৳${product.price}
 Color: ${selectedColor}
 Size: ${selectedSize}`;
 
+  const nextImage = () => {
+    if (product.images && product.images.length > 0) {
+      setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
+    }
+  };
+
+  const prevImage = () => {
+    if (product.images && product.images.length > 0) {
+      setCurrentImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length);
+    }
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -50,13 +63,50 @@ Size: ${selectedSize}`;
           {/* Left Column: Images */}
           <div className="space-y-4">
             <div className="aspect-[3/4] bg-brand-beige-dark overflow-hidden relative group">
-              <img src={product.images?.[0] || "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop"} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <img 
+                src={product.images?.[currentImageIndex] || "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop"} 
+                alt={product.name} 
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+              />
               {product.oldPrice && (
                 <div className="absolute top-4 left-4 z-10 bg-brand-pink text-red-800 text-xs font-bold px-3 py-1.5 tracking-wider uppercase shadow-sm">
                   -{Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)}% OFF
                 </div>
               )}
+              
+              {/* Slider Arrows */}
+              {product.images && product.images.length > 1 && (
+                <>
+                  <button 
+                    onClick={prevImage}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-brand-black p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                  </button>
+                  <button 
+                    onClick={nextImage}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-brand-black p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                  </button>
+                </>
+              )}
             </div>
+
+            {/* Thumbnails */}
+            {product.images && product.images.length > 1 && (
+              <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                {product.images.map((img, idx) => (
+                  <button 
+                    key={idx}
+                    onClick={() => setCurrentImageIndex(idx)}
+                    className={`flex-shrink-0 w-20 h-24 sm:w-24 sm:h-32 bg-brand-beige-dark overflow-hidden relative transition-all ${currentImageIndex === idx ? 'ring-2 ring-brand-black opacity-100' : 'opacity-60 hover:opacity-100'}`}
+                  >
+                    <img src={img} alt={`${product.name} thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Right Column: Details */}
