@@ -107,7 +107,7 @@ export default function Home({ sanityProducts, sanityCategories }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const sanityProducts = await client.fetch(`*[_type == "product"]{
     id, name, price, oldPrice, category, subcategory, colors, sizes, description, isNew, isTrending, isBestSeller,
     "images": images[].asset->url
@@ -122,7 +122,6 @@ export async function getStaticProps() {
     props: {
       sanityProducts,
       sanityCategories
-    },
-    revalidate: 10, // rebuild every 10 seconds so new products appear quickly
+    }
   };
 }
