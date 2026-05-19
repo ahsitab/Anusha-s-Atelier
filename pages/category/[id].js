@@ -160,24 +160,35 @@ export default function CategoryPage({ category, categoryProducts }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const localCategory = categories.find((c) => c.id === params.id);
+  const catId = params.id;
 
+  // 1. Try local categories first
+  const localCategory = categories.find((c) => c.id === catId);
+
+  // 2. Try Sanity category (matching by id field)
   const sanityCategory = await client.fetch(`*[_type == "category" && id == $catId][0]{
     id, name, description,
     "image": image.asset->url
-  }`, { catId: params.id });
+  }`, { catId });
 
-  const categoryToUse = sanityCategory || localCategory;
+  // 3. Auto-generate category from URL slug if nothing found
+  //    e.g. "bed-sheet" → "Bed Sheet"
+  const autoCategory = {
+    id: catId,
+    name: catId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+    image: null,
+    subcategories: [],
+  };
 
-  if (!categoryToUse) {
-    return { notFound: true };
-  }
+  const categoryToUse = sanityCategory || localCategory || autoCategory;
 
+  // 4. Fetch ALL Sanity products matching this category value
   const sanityProducts = await client.fetch(`*[_type == "product" && category == $catId]{
     id, name, price, oldPrice, category, subcategory, colors, sizes, description, isNew, isTrending, isBestSeller,
     "images": images[].asset->url
-  }`, { catId: params.id });
+  }`, { catId });
 
+  // 5. Merge with local products (smart merge - no duplicates)
   const localCategoryProducts = products.filter(
     (p) => p.category === categoryToUse.name || p.category === categoryToUse.id
   );
@@ -194,4 +205,5 @@ export async function getServerSideProps({ params }) {
     },
   };
 }
+
 
