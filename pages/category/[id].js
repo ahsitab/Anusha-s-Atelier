@@ -68,7 +68,7 @@ export default function CategoryPage({ category, categoryProducts }) {
 
       {/* Category Hero */}
       <div className="relative h-[40vh] md:h-[50vh] bg-brand-black w-full overflow-hidden">
-        <img src={category.image} alt={category.name} className="w-full h-full object-cover opacity-60" />
+        <img src={category.image || category.imageUrl} alt={category.name} className="w-full h-full object-cover opacity-60" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
           <h1 className="text-4xl md:text-6xl font-serif text-white tracking-wider uppercase">{category.name}</h1>
           <p className="text-gray-300 mt-4 tracking-widest text-sm uppercase">Exclusive Collection</p>
@@ -102,7 +102,7 @@ export default function CategoryPage({ category, categoryProducts }) {
               <div className="mb-8">
                 <h3 className="font-serif text-xl border-b border-gray-100 pb-3 mb-4">Subcategories</h3>
                 <div className="space-y-3">
-                  {category.subcategories.map(sub => (
+                  {category.subcategories?.map(sub => (
                     <label key={sub} className="flex items-center gap-3 cursor-pointer group" onClick={() => toggleSubcategory(sub)}>
                       <div className={`w-5 h-5 border flex items-center justify-center transition-colors ${selectedSubcategories.includes(sub) ? 'bg-brand-gold border-brand-gold' : 'border-gray-300 group-hover:border-brand-gold'}`}>
                         {selectedSubcategories.includes(sub) && <Check size={14} className="text-white" />}
@@ -160,27 +160,40 @@ export default function CategoryPage({ category, categoryProducts }) {
 }
 
 export async function getStaticPaths() {
+  // We can just rely on the local categories for paths, 
+  // but we should set fallback to 'blocking' so newly created Sanity categories work automatically!
   const paths = categories.map((category) => ({
     params: { id: category.id },
   }));
 
-  return { paths, fallback: false };
+  return { paths, fallback: 'blocking' };
 }
 
 export async function getStaticProps({ params }) {
-  const category = categories.find((c) => c.id === params.id);
+  const localCategory = categories.find((c) => c.id === params.id);
   
+  const sanityCategory = await client.fetch(`*[_type == "category" && id == $catId][0]{
+    id, name, description,
+    "image": image.asset->url
+  }`, { catId: params.id });
+
+  const categoryToUse = sanityCategory || localCategory;
+
+  if (!categoryToUse) {
+    return { notFound: true };
+  }
+
   const sanityProducts = await client.fetch(`*[_type == "product" && category == $catId]{
     id, name, price, oldPrice, category, subcategory, colors, sizes, description, isNew, isTrending, isBestSeller,
     "images": images[].asset->url
   }`, { catId: params.id });
 
-  const localCategoryProducts = products.filter((p) => p.category === category.name);
+  const localCategoryProducts = products.filter((p) => p.category === categoryToUse.name);
   const categoryProducts = sanityProducts?.length > 0 ? sanityProducts : localCategoryProducts;
 
   return {
     props: {
-      category,
+      category: categoryToUse,
       categoryProducts,
     },
     revalidate: 60

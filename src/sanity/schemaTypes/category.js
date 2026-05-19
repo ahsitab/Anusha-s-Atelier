@@ -19,6 +19,14 @@ export default {
       name: 'description',
       title: 'Description',
       type: 'text'
+    },
+    {
+      name: 'image',
+      title: 'Category Image',
+      type: 'image',
+      options: {
+        hotspot: true
+      }
     }
   ]
 }

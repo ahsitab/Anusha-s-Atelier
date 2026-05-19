@@ -8,8 +8,9 @@ import { motion } from "framer-motion";
 
 import { client } from "@/src/sanity/lib/client";
 
-export default function Home({ sanityProducts }) {
+export default function Home({ sanityProducts, sanityCategories }) {
   const finalProducts = sanityProducts?.length > 0 ? sanityProducts : products;
+  const finalCategories = sanityCategories?.length > 0 ? sanityCategories : categories;
   
   const trendingProducts = finalProducts.filter(p => p.isTrending || p.trending).slice(0, 4);
   const bestSellers = finalProducts.filter(p => p.isBestSeller || p.bestSeller).slice(0, 4);
@@ -32,9 +33,9 @@ export default function Home({ sanityProducts }) {
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
-            {categories.map((cat) => (
+            {finalCategories.map((cat) => (
               <Link href={`/category/${cat.id}`} key={cat.id} className="group relative overflow-hidden block aspect-[4/5]">
-                <img src={cat.image} alt={cat.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <img src={cat.image || cat.imageUrl} alt={cat.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <h3 className="text-white text-lg md:text-xl font-serif font-medium tracking-wider">{cat.name}</h3>
@@ -109,9 +110,15 @@ export async function getStaticProps() {
     "images": images[].asset->url
   }`);
 
+  const sanityCategories = await client.fetch(`*[_type == "category"]{
+    id, name, description,
+    "image": image.asset->url
+  }`);
+
   return {
     props: {
-      sanityProducts
+      sanityProducts,
+      sanityCategories
     },
     revalidate: 60, // revalidate every minute
   };
