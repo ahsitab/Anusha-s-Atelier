@@ -9,8 +9,11 @@ import { motion } from "framer-motion";
 import { client } from "@/src/sanity/lib/client";
 
 export default function Home({ sanityProducts, sanityCategories }) {
-  const finalProducts = sanityProducts?.length > 0 ? sanityProducts : products;
-  const finalCategories = sanityCategories?.length > 0 ? sanityCategories : categories;
+  const sanityProductIds = sanityProducts?.map(p => p.id) || [];
+  const finalProducts = [...(sanityProducts || []), ...products.filter(p => !sanityProductIds.includes(p.id))];
+
+  const sanityCategoryIds = sanityCategories?.map(c => c.id) || [];
+  const finalCategories = [...(sanityCategories || []), ...categories.filter(c => !sanityCategoryIds.includes(c.id))];
   
   const trendingProducts = finalProducts.filter(p => p.isTrending || p.trending).slice(0, 4);
   const bestSellers = finalProducts.filter(p => p.isBestSeller || p.bestSeller).slice(0, 4);

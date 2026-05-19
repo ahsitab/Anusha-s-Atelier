@@ -188,8 +188,9 @@ export async function getStaticProps({ params }) {
     "images": images[].asset->url
   }`, { catId: params.id });
 
-  const localCategoryProducts = products.filter((p) => p.category === categoryToUse.name);
-  const categoryProducts = sanityProducts?.length > 0 ? sanityProducts : localCategoryProducts;
+  const localCategoryProducts = products.filter((p) => p.category === categoryToUse.name || p.category === categoryToUse.id);
+  const sanityProductIds = sanityProducts?.map(p => p.id) || [];
+  const categoryProducts = [...(sanityProducts || []), ...localCategoryProducts.filter(p => !sanityProductIds.includes(p.id))];
 
   return {
     props: {
