@@ -40,6 +40,7 @@ export default function Navbar() {
             <Link href="/category/saree" className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors font-medium">Saree</Link>
             <Link href="/category/one-piece" className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors font-medium">One Piece</Link>
             <Link href="/category/sandals" className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors font-medium">Sandals</Link>
+            <Link href="/category/bed-sheet" className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors font-medium">Bed Sheet</Link>
           </div>
 
           {/* Icons */}
@@ -65,7 +66,8 @@ export default function Navbar() {
             <Link href="/category/three-piece" className="block px-3 py-3 text-base tracking-widest uppercase border-b border-brand-beige-dark" onClick={() => setMobileMenuOpen(false)}>Three Piece</Link>
             <Link href="/category/saree" className="block px-3 py-3 text-base tracking-widest uppercase border-b border-brand-beige-dark" onClick={() => setMobileMenuOpen(false)}>Saree</Link>
             <Link href="/category/one-piece" className="block px-3 py-3 text-base tracking-widest uppercase border-b border-brand-beige-dark" onClick={() => setMobileMenuOpen(false)}>One Piece</Link>
-            <Link href="/category/sandals" className="block px-3 py-3 text-base tracking-widest uppercase" onClick={() => setMobileMenuOpen(false)}>Sandals</Link>
+            <Link href="/category/sandals" className="block px-3 py-3 text-base tracking-widest uppercase border-b border-brand-beige-dark" onClick={() => setMobileMenuOpen(false)}>Sandals</Link>
+            <Link href="/category/bed-sheet" className="block px-3 py-3 text-base tracking-widest uppercase" onClick={() => setMobileMenuOpen(false)}>Bed Sheet</Link>
           </div>
         </div>
       )}
