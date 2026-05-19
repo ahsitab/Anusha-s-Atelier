@@ -46,6 +46,7 @@ export default function Footer() {
               <li><Link href="/category/saree" className="hover:text-brand-gold transition-colors">Premium Sarees</Link></li>
               <li><Link href="/category/one-piece" className="hover:text-brand-gold transition-colors">One Piece Dresses</Link></li>
               <li><Link href="/category/sandals" className="hover:text-brand-gold transition-colors">Luxury Sandals</Link></li>
+              <li><Link href="/category/bed-sheet" className="hover:text-brand-gold transition-colors">Bed Sheets</Link></li>
             </ul>
           </div>
 
@@ -84,8 +85,9 @@ export default function Footer() {
 
         </div>
 
-        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-sm text-gray-500">
+        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-sm text-gray-500 space-y-2">
           <p>&copy; {new Date().getFullYear()} Anusha's Atelier. All rights reserved.</p>
+          <p className="text-gray-600">Made with ❤️ by <span className="text-brand-gold">Asfar Hossain Sitab</span></p>
         </div>
       </div>
     </footer>

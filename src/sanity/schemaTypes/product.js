@@ -37,7 +37,8 @@ export default {
           {title: 'Three Piece', value: 'three-piece'},
           {title: 'One Piece', value: 'one-piece'},
           {title: 'Jewelry', value: 'jewelry'},
-          {title: 'Sandals', value: 'sandals'}
+          {title: 'Sandals', value: 'sandals'},
+          {title: 'Bed Sheet', value: 'bed-sheet'}
         ]
       }
     },

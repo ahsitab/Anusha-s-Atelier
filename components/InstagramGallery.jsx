@@ -10,10 +10,10 @@ const InstagramIcon = ({ size, className }) => (
 
 const IMAGES = [
   "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1627918361099-c6e7fc558e65?q=80&w=400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1599643478514-4a11b154e2ee?q=80&w=400&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=400&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=400&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=400&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1610189014169-3a3399b70b55?q=80&w=400&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=400&auto=format&fit=crop",
 ];
 
 export default function InstagramGallery() {
