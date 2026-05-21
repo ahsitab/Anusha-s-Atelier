@@ -1,40 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+<div align="center">
+  <h1>✨ Anusha's Atelier ✨</h1>
+  <p>A modern, elegant e-commerce and gallery experience built with Next.js & Sanity.io</p>
+  
+  <a href="#features">Features</a> •
+  <a href="#tech-stack">Tech Stack</a> •
+  <a href="#getting-started">Getting Started</a> •
+  <a href="#deployment">Deployment</a>
+</div>
 
-## Getting Started
+---
 
-First, run the development server:
+## 🎨 User Interface (UI)
+
+*A premium, state-of-the-art web design featuring dynamic animations, high-quality visuals, and a sleek aesthetic.*
+
+> **Note:** Replace the placeholder below with actual screenshots of your UI.
+> 
+> ![UI Preview](https://via.placeholder.com/1000x500/1a1a1a/ffffff?text=Anusha's+Atelier+UI+Preview)
+
+## ✨ Features
+
+- **Modern E-Commerce Experience:** Beautiful product galleries and smooth user flows.
+- **Headless CMS Integration:** Powered by Sanity.io for seamless content management.
+- **Dynamic Animations:** Engaging micro-interactions using Framer Motion.
+- **Responsive Design:** Flawless experience across all devices (Desktop, Tablet, Mobile).
+- **Optimized Performance:** Blazing fast load times leveraging Next.js.
+
+## 🛠 Tech Stack
+
+| Category | Technology | Description |
+| :--- | :--- | :--- |
+| **Framework** | [Next.js](https://nextjs.org/) | React framework for production |
+| **CMS** | [Sanity.io](https://sanity.io/) | Headless content management |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/) & [Styled Components](https://styled-components.com/) | Utility-first & component-level styles |
+| **Animations** | [Framer Motion](https://www.framer.com/motion/) | Production-ready React animations |
+| **Icons** | [Lucide React](https://lucide.dev/) | Beautiful & consistent icon toolkit |
+
+## 🚀 Getting Started
+
+Follow these steps to set up the project locally.
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure Environment
+
+Ensure your `.env.local` file is set up with the correct Sanity credentials:
+
+```env
+NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
+NEXT_PUBLIC_SANITY_DATASET=production
+```
+
+### 3. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result. You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## 🌐 Deployment
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new).
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+Check out the [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+---
+<div align="center">
+  <p>Built with ❤️ for Anusha's Atelier.</p>
+</div>
